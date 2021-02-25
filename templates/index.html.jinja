@@ -51,6 +51,9 @@
     		},{
     			data: "URL",
     			title: "URL",
+                render: function(data, type, row) {
+                    return "<a href='" + data + "' target='_blank'>" + data + "</a>"
+                },
     			type: "text"
     		},{
     			data: "Notes",
@@ -93,8 +96,8 @@
                     text: 'Delete',
                     name: 'delete'
                 },{
-    				text: 'Refresh',
-    				name: 'refresh'
+    				text: 'Sync',
+    				name: 'sync'
 
     			}],
     			onAddRow: function(alteditor, rowdata, success, error) {
