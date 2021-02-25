@@ -1,0 +1,41 @@
+<html>
+	<head>
+		<title>Password Manager</title>
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<link type="image/x-icon" rel="shortcut icon" href="static/images/favicon.ico">
+		<link rel="stylesheet" type="text/css" href="static/css/bootstrap.css"/>
+		<style type="text/css">
+			body {
+				display: flex;
+				align-items: center;
+				padding-top: 40px;
+				padding-bottom: 40px;
+				background-color: #f5f5f5;
+			}
+			.form-signin {
+				width: 100%;
+				max-width: 330px;
+				padding: 15px;
+				margin: auto;
+			}
+		</style>
+	</head>
+	<body class="bg-light">
+		<form class="form-signin" action="" method="post">
+			<h2 class="form-signin-heading text-center">You shall not pass</h2>
+			<input type="hidden" name="username" value="root">
+			<label for="inputPassword" class="sr-only">Master key</label>
+			<input type="password" id="inputPassword" class="form-control" placeholder="Master key" name="password" value="{{request.form.password }}" required autofocus>
+			{% if error %}
+				<p class="fw-bold text-danger">{{ error }}
+			{% endif %}
+			<div class="checkbox">
+				<label>
+					<input type="checkbox" value="remember-me" disabled> Remember me
+				</label>
+			</div>
+			<button class="btn btn btn-primary btn-block" type="submit">Send</button>
+			<p class="mt-5 mb-3 text-muted text-center">&copy; 2021–2021</p>
+		</form>
+	</body>
+</html>

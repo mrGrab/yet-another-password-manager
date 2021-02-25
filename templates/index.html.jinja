@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+    	<title>Password Manager</title>
+    	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link type="image/x-icon" rel="shortcut icon" href="static/images/favicon.ico">
+
+        <link rel="stylesheet" type="text/css" href="static/css/bootstrap.css"/>
+        <link rel="stylesheet" type="text/css" href="static/css/jquery.dataTables.min.css"/>
+        <link rel="stylesheet" type="text/css" href="static/css/buttons.dataTables.min.css"/>
+        <link rel="stylesheet" type="text/css" href="static/css/select.dataTables.min.css"/>
+        <link rel="stylesheet" type="text/css" href="static/css/responsive.dataTables.min.css"/>
+
+        <script type="text/javascript" src="static/js/jquery-3.5.1.min.js"></script>
+        <script type="text/javascript" src="static/js/jquery.dataTables.min.js"></script>
+        <script type="text/javascript" src="static/js/dataTables.buttons.min.js"></script>
+        <script type="text/javascript" src="static/js/dataTables.select.min.js"></script>
+        <script type="text/javascript" src="static/js/bootstrap.js"></script>
+        <script type="text/javascript" src="static/js/dataTables.responsive.min.js"></script>
+        <script type="text/javascript" src="static/js/dataTables.altEditor.free.js"></script>
+        <script type="text/javascript" src="static/js/bootbox.min.js"></script>
+
+    	<style type="text/css">
+            table.dataTable thead {
+                background-color: #d1e7dd;
+            }
+  		</style>
+    </head>
+    <body class="bg-light">
+    <div class="container-fluid">
+        <br>
+    	<table id="table_id" class="table table-striped compact table-hover dt-responsive">
+    	<script type="text/javascript" language="javascript">
+		$(document).ready(function() {    		
+    		var columnDefs = [{
+    			data: "Title",
+    			title: "Title",
+    			required: true,
+    			type: "text"
+    		},{
+    			data: "Username",
+    			title: "Username",
+    			type: "text",
+    		},{
+    			data: null,
+    			title: "Password",
+    			type: "text",
+                targets: -1,
+                defaultContent: "<button class='btn btn-outline-secondary btn-sm'>show</button>"
+    		},{
+    			data: "URL",
+    			title: "URL",
+    			type: "text"
+    		},{
+    			data: "Notes",
+    			title: "Notes",
+    			type: "text"
+    		},{
+    			data: "Modified",
+    			title: "Modified",
+    			type: "hidden",
+                searchable: false,
+    		}];
+
+    		var myTable;
+    		var url_list = './list';
+            var url_crud = './crud';
+
+    		myTable = $('#table_id').DataTable({
+    			"sPaginationType": "full_numbers",
+                lengthMenu: [-1],
+    			responsive: true,
+    			ajax: {
+    				url: url_list,
+    				type: 'POST',
+    				dataSrc: ''
+    			},
+    			columns: columnDefs,
+    			dom: 'Bfrtip',
+    			select: 'single',
+    			altEditor: true,
+      			buttons: [
+                {
+                    text: 'Add',
+                    name: 'add'
+                },{
+                    extend: "selected",
+                    text: "Edit",
+                    name: "edit"
+                },{
+                    extend: 'selected',
+                    text: 'Delete',
+                    name: 'delete'
+                },{
+    				text: 'Refresh',
+    				name: 'refresh'
+
+    			}],
+    			onAddRow: function(alteditor, rowdata, success, error) {
+                    var json = JSON.stringify(rowdata);
+    				$.ajax({
+    					url: url_crud,
+    					contentType: 'application/json',
+    					type: 'POST',
+    					data: json,
+    					dataType: 'json',
+    					success: success,
+    					error: error
+    				});
+    			},
+                onEditRow: function(alteditor, rowdata, success, error) {
+                    var json = JSON.stringify(rowdata);
+                    $.ajax({
+                        url: url_crud,
+                        contentType: 'application/json',
+                        type: 'POST',
+                        dataType: 'json',
+                        data: json,
+                        success: success,
+                        error: error
+                    });
+                },                    
+                onDeleteRow: function(alteditor, rowdata, success, error) {
+                    rowdata['Remove'] = true;
+                    rowdata[''] = true;
+                    var json = JSON.stringify(rowdata);
+                    $.ajax({
+                        url: url_crud,
+                        type: 'POST',
+                        dataType: 'json',
+                        data: json,
+                        success: success,
+                        error: error
+
+    		        });
+                }
+            });
+            $('#table_id tbody').on( 'click', 'button', function () {
+                var data = myTable.row( $(this).parents('tr') ).data();
+                bootbox.alert ({
+                    message: "<center>"+data['Password']+"</center>",
+                    backdrop: true,
+                    size: 'small',
+                    className: 'alert',
+                    closeButton: false
+                });
+            });
+    	});
+    	</script>
+    </div>
+    </body>
+</html>
