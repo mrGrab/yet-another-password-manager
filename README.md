@@ -17,5 +17,3 @@ Commands:
   show    Print out data from file
   webui   Start webUI
 ```
-
-
