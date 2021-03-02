@@ -47,7 +47,14 @@
     			title: "Password",
     			type: "text",
                 targets: -1,
-                defaultContent: "<button class='btn btn-outline-secondary btn-sm'>show</button>"
+                defaultContent: "<button id='pwd' class='btn btn-outline-secondary btn-sm'>show</button> \
+                                <button id='ctc' class='btn btn-link btn-sm'> \
+                                    <img src='static/images/copy-icon.png' alt='Copy to clipboard' /> \
+                                </button>"
+            },{
+                data: "Tag",
+                title: "Tag",
+                type: "text"                
     		},{
     			data: "URL",
     			title: "URL",
@@ -141,15 +148,29 @@
             });
             $('#table_id tbody').on( 'click', 'button', function () {
                 var data = myTable.row( $(this).parents('tr') ).data();
-                bootbox.alert ({
-                    message: "<center>"+data['Password']+"</center>",
-                    backdrop: true,
-                    size: 'small',
-                    className: 'alert',
-                    closeButton: false
-                });
+                if (this.id == 'pwd') {
+                    bootbox.alert ({
+                        message: "<center>"+data['Password']+"</center>",
+                        backdrop: true,
+                        size: 'small',
+                        className: 'alert',
+                        closeButton: false
+                    });
+                };
+                if (this.id == 'ctc') {
+                    copyToClipboard(data['Password']);
+                };
             });
+
     	});
+        var copyToClipboard = function (text) {
+            var $txt = $('<textarea />');    
+            $txt.val(text).css({ width: "1px", height: "1px" }).appendTo('body');
+            $txt.select();    
+            if (document.execCommand('copy')) {
+                $txt.remove();
+            }
+        };
     	</script>
     </div>
     </body>
